@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Properties - Bidding System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+ :root {
+            --gradient-bg: linear-gradient(135deg, #1a1c20 0%, #2d3436 100%);
+            --card-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            --accent-color: #00f2fe;
+            --text-color: #ffffff;
+            --button-color: linear-gradient(45deg, #00f2fe 0%, #4facfe 100%);
+            --logout-button-color: linear-gradient(45deg, #ff416c 0%, #ff4b2b 100%);
+        }
+
+        /* Light Mode Variables */
+        .light-mode {
+            --gradient-bg: linear-gradient(135deg, #f0f2f5 0%, #ffffff 100%);
+            --card-bg: linear-gradient(145deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.02) 100%);
+            --accent-color: #007acc;
+            --text-color: #000000;
+            --button-color: linear-gradient(45deg, #007acc 0%, #005bb5 100%);
+            --logout-button-color: linear-gradient(45deg, #ff6347 0%, #ff4500 100%);
+        }
+
+        /* Rest of your styles here with variables */
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--gradient-bg);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background: var(--card-bg);
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        /* Add mode-toggle button styling */
+        #mode-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            background: var(--button-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(45deg, #fff 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        #login-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+
+        button {
+            background: linear-gradient(45deg, #00f2fe 0%, #4facfe 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+        }
+
+        #logout-button {
+            background: linear-gradient(45deg, #ff416c 0%, #ff4b2b 100%);
+        }
+
+        #properties {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 1400px;
+        }
+
+        .property {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .property:hover {
+            transform: translateY(-10px);
+        }
+
+        .property img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .property:hover img {
+            transform: scale(1.05);
+        }
+
+        .property-content {
+            padding: 1.5rem;
+        }
+
+        .countdown {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        #leaderboard {
+            width: 90%;
+            max-width: 1400px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+            margin-top: 1rem;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+            color: var(--accent-color);
+        }
+
+        td {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
+            100% { text-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <button class="toggle-button" onclick="toggleTheme()">Toggle Dark/Light Mode</button>
+<header>
+    <h1>Find Your Perfect Property</h1>
+</header>
+
+<div id="login-section">
+    <input type="text" id="username" placeholder="Enter your name" required>
+    <button onclick="login()">Login</button>
+</div>
+<p id="user-greeting" style="text-align: center; font-weight: bold;">
+    Hi <span id="username-display"></span>
+    <button id="logout-button" style="display:none;" onclick="logout()">Logout</button>
+</p>
+
+
+
+<section id="leaderboard">
+    <center>
+    <h2>Properties Bidding Overview</h2>
+</center>
+    <table>
+        <thead>
+            <center>
+            <tr>
+                <th>Property Title</th>
+                <th>Current Highest Bid</th>
+                <th>Top Bidder</th>
+                <th>All Bids</th>
+                <th>Time Remaining</th>
+            </tr>
+        </center>
+        </thead>
+        <tbody id="leaderboardList"></tbody>
+    </table>
+</section>
+<center>
+<section id="properties"></section>
+</center>
+
+<script>
+
+        // JavaScript to toggle dark and light mode
+        function toggleTheme() {
+        const body = document.body;
+        if (body.classList.contains("dark-mode")) {
+            body.classList.remove("dark-mode");
+            body.classList.add("light-mode");
+            localStorage.setItem("theme", "light-mode");
+        } else {
+            body.classList.remove("light-mode");
+            body.classList.add("dark-mode");
+            localStorage.setItem("theme", "dark-mode");
+        }
+    }
+
+    // Apply saved theme on page load
+    window.onload = function() {
+        const savedTheme = localStorage.getItem("theme") || "dark-mode";
+        document.body.classList.add(savedTheme);
+        
+        const currentUser = sessionStorage.getItem("currentUser");
+        if (currentUser) {
+            document.getElementById("username-display").textContent = currentUser;
+            document.getElementById("login-section").style.display = "none";
+            document.getElementById("logout-button").style.display = "inline";
+        }
+        
+        renderProperties();
+        updateLeaderboard();
+    };
+
+
+
+    const propertiesData = JSON.parse(localStorage.getItem("propertiesData")) || [
+        { title: "Luxury Apartment", location: "New York", price: 1500, img: "https://wallpapercave.com/uwp/uwp4209818.jpeg", currentBid: 1500, topBidder: "None", bids: [], timeRemaining: 10800 },
+        { title: "Cozy House", location: "San Francisco", price: 2000, img: "https://wallpapercave.com/uwp/uwp4209884.jpeg", currentBid: 2000, topBidder: "None", bids: [], timeRemaining: 10800 },
+        { title: "Modern Apartment", location: "New York", price: 1000, img: "https://wallpapercave.com/uwp/uwp4211376.jpeg", currentBid: 1000, topBidder: "None", bids: [], timeRemaining: 10800 },
+        { title: "Spacious Villa", location: "Los Angeles", price: 3000, img: "villa1.jpg", currentBid: 3000, topBidder: "None", bids: [], timeRemaining: 10800 },
+        { title: "City Studio", location: "Chicago", price: 1200, img: "studio1.jpg", currentBid: 1200, topBidder: "None", bids: [], timeRemaining: 10800 },
+        { title: "Beachfront Condo", location: "Miami", price: 2500, img: "condo1.jpg", currentBid: 2500, topBidder: "None", bids: [], timeRemaining: 10800 },
+        { title: "Charming Cottage", location: "Austin", price: 1800, img: "house2.jpg", currentBid: 1800, topBidder: "None", bids: [], timeRemaining: 10800 },
+        { title: "Downtown Apartment", location: "Boston", price: 1400, img: "apartment3.jpg", currentBid: 1400, topBidder: "None", bids: [], timeRemaining: 10800 }
+    ];
+
+    function generateToken() {
+        return Math.floor(10000 + Math.random() * 90000).toString();  // Generates a 5-digit token
+    }
+
+    function login() {
+    const username = document.getElementById("username").value.trim(); // Trim whitespace
+    
+    if (username) {
+        let userData = JSON.parse(localStorage.getItem("userData")) || {};
+        if (!userData[username]) {
+            const token = generateToken();
+            userData[username] = { token };
+            localStorage.setItem("userData", JSON.stringify(userData));
+            alert(`Welcome ${username}! Your unique token is: ${token}`);
+        }
+        
+        sessionStorage.setItem("currentUser", username);
+        document.getElementById("username-display").textContent = username; // Set displayed username
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("logout-button").style.display = "inline"; // Show logout button
+        document.getElementById("username").value = ""; // Clear input field after login
+        renderProperties(); // Refresh properties to show updated data
+    } else {
+        alert("Please enter your name.");
+    }
+}
+
+function logout() {
+    sessionStorage.removeItem("currentUser"); // Clear the current user from session storage
+    document.getElementById("username-display").textContent = ""; // Clear the greeting message
+    document.getElementById("login-section").style.display = "flex"; // Show login section
+    document.getElementById("logout-button").style.display = "none"; // Hide logout button
+    renderProperties(); // Refresh properties display to reset any bidding data
+}
+
+
+    function renderProperties() {
+        const propertiesContainer = document.getElementById("properties");
+        propertiesContainer.innerHTML = propertiesData.map((property, index) => `
+            <div class="property">
+                <img src="${property.img}" alt="${property.title}">
+                <h3>${property.title}</h3>
+                <p>Location: ${property.location}</p>
+                <p>Starting Price: $${property.price}</p>
+                <p>Current Bid: $${property.currentBid}</p>
+                <p>Top Bidder: ${property.topBidder}</p>
+                <div class="countdown" id="countdown${index}"></div>
+                <div class="bidding-section">
+                    <input type="number" id="bidAmount${index}" placeholder="Enter your bid">
+                    <button onclick="placeBid(${index})">Place Bid</button>
+                </div>
+            </div>
+        `).join('');
+
+        // Start countdown for each property
+        propertiesData.forEach((property, index) => startCountdown(index));
+    }
+
+    function startCountdown(index) {
+        const countdownElement = document.getElementById(`countdown${index}`);
+        let timeRemaining = propertiesData[index].timeRemaining; // Time in seconds
+
+        const interval = setInterval(() => {
+            const hours = Math.floor(timeRemaining / 3600);
+            const minutes = Math.floor((timeRemaining % 3600) / 60);
+            const seconds = timeRemaining % 60;
+
+            countdownElement.textContent = `Time Remaining: ${hours}h ${minutes}m ${seconds}s`;
+
+            if (timeRemaining <= 0) {
+                clearInterval(interval);
+                countdownElement.textContent = "Bidding Closed";
+            }
+
+            timeRemaining--;
+        }, 1000);
+    }
+
+    function placeBid(index) {
+        const bidAmount = parseFloat(document.getElementById(`bidAmount${index}`).value);
+        const currentUser = sessionStorage.getItem("currentUser");
+        
+        if (!currentUser) {
+            alert("Please login to place a bid.");
+            return;
+        }
+
+        if (isNaN(bidAmount) || bidAmount <= propertiesData[index].currentBid) {
+            alert("Please enter a valid bid amount higher than the current bid.");
+            return;
+        }
+
+        propertiesData[index].currentBid = bidAmount;
+        propertiesData[index].topBidder = currentUser;
+        propertiesData[index].bids.push({ user: currentUser, amount: bidAmount });
+        localStorage.setItem("propertiesData", JSON.stringify(propertiesData));
+        updateLeaderboard();
+        renderProperties();
+    }
+
+    function updateLeaderboard() {
+        const leaderboard = document.getElementById("leaderboardList");
+        leaderboard.innerHTML = propertiesData.map(property => `
+            <tr>
+                <td>${property.title}</td>
+                <td>$${property.currentBid}</td>
+                <td>${property.topBidder}</td>
+                <td>${property.bids.map(bid => `${bid.user}: $${bid.amount}`).join(", ")}</td>
+                <td>${property.timeRemaining > 0 ? 'Active' : 'Closed'}</td>
+            </tr>
+        `).join('');
+    }
+
+    // On page load, check if the user is already logged in
+    window.onload = function() {
+    const currentUser = sessionStorage.getItem("currentUser");
+    if (currentUser) {
+        document.getElementById("username-display").textContent = currentUser; // Set displayed username
+        document.getElementById("login-section").style.display = "none"; // Hide login section
+        document.getElementById("logout-button").style.display = "inline"; // Show logout button
+    }
+    renderProperties(); // Render properties on load
+    updateLeaderboard(); // Update leaderboard on load
+};
+
+</script>
+</body>
+</html>

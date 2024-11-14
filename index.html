@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BidMyHome</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Glassmorphism & Light Theme Styles */
+        .loader-wrapper {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #ff4d00;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dark Mode Styles */
+        :root {
+            --background-light: linear-gradient(135deg, #ffffff, #f0f0f0);
+            --background-dark: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            --text-light: #333;
+            --text-dark: #fff;
+            --card-bg-light: #fff;
+            --card-bg-dark: #2d2d2d;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--background-light);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle i {
+            font-size: 24px;
+            color: #ff4d00;
+        }
+
+        /* Enhanced Card Animations */
+        .service-card, .properties .card {
+            transform: translateY(0);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: linear-gradient(45deg, #1a1a1a, #333);
+            padding: 60px 0 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,77,0,0.1) 0%, transparent 100%);
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding: 0 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-section {
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            color: #ff4d00;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #ff4d00;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: #ff4d00;
+            transform: translateY(-5px);
+        }
+
+        /* Property Details Styles */
+        .property-details {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .property-specs {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .property-spec {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .property-price {
+            font-size: 1.5em;
+            color: #ff4d00;
+            font-weight: bold;
+        }
+
+        .owner-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .owner-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+
+        /* Header with Glassmorphism */
+        header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2); /* Light transparent background */
+            backdrop-filter: blur(15px); /* Blur effect for glassmorphism */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        nav ul li a:hover {
+            color: #ff4d00; /* Accent color on hover */
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.4); /* Light glassy background for input */
+            color: #333;
+            backdrop-filter: blur(5px);
+        }
+
+        .auth-button .dropdown-btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.4); /* Glassmorphism for buttons */
+            border: none;
+            color: white;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .auth-button .dropdown-btn:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Hero Section with Slideshow */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+        }
+
+        .slideshow {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .slideshow img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            opacity: 0;
+            animation: slide 15s infinite;
+        }
+
+        .slideshow img.active {
+            opacity: 1;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes slide {
+            0%,
+            33% {
+                opacity: 1;
+            }
+
+            34%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .cta-buttons {
+            z-index: 2;
+            position: relative;
+        }
+
+        .cta-buttons button {
+            background: rgba(255, 255, 255, 0.4);
+            border: none;
+            padding: 12px 30px;
+            margin: 10px;
+            border-radius: 30px;
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .cta-buttons button:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Services Section */
+        .service {
+            padding: 60px 0;
+            background-color: #f8f8f8;
+            text-align: center;
+        }
+
+        .service .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .service .section-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .service .section-subtitle {
+            font-size: 20px;
+            margin-bottom: 40px;
+            color: #777;
+        }
+
+        .service-list {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .service-card {
+            flex: 1 1 calc(33.333% - 20px);
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            margin-bottom: 20px;
+        }
+
+        .card-icon img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .card-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .card-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .card-link {
+            text-decoration: none;
+            font-weight: bold;
+            color: #ff4d00;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .card-link:hover {
+            color: #d63c00;
+        }
+
+        /* Properties Section */
+        .properties {
+            padding: 60px 0;
+            background-color: #f8f8f8;
+            text-align: center;
+        }
+
+        .properties .section-title {
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .properties .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .properties .col-md-4 {
+            flex: 1 1 calc(33.333% - 20px);
+        }
+
+        .properties .card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .properties .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .properties .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .properties .card div {
+            padding: 20px;
+        }
+
+        .properties .card h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .properties .card p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .btn-primary {
+            background-color: #ff4d00;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #d63c00;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .service-list,
+            .properties .row {
+                flex-direction: column;
+            }
+
+            .col-md-4,
+            .service-card {
+                flex: 1 1 100%;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+            width: 100%;
+            background-color: rgb(7, 7, 7);
+            height: auto;
+            padding-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .footer h4 {
+            margin-top: 20px;
+        }
+
+        .footer p {
+            margin-top: 10px;
+            font-size: small;
+        }
+
+        .footer .icons i {
+            margin: 0 10px;
+            color: white;
+            font-size: 20px;
+        }
+
+        html {
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #d63c00;
+}
+    </style>
+</head>
+
+<body>
+  <div class="loader-wrapper">
+    <div class="loader"></div>
+</div>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <i class="fas fa-moon"></i>
+</button>
+
+
+    <header>
+        <h1>BidMyHome</h1>
+        <nav>
+            <ul>
+                <li><a href="#services">About Us</a></li>
+                <li><a href="#services">Blog</a></li>
+                <li><a href="buy.html">Properties</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="search-bar">
+            <input type="text" placeholder="Search for properties...">
+        </div>
+        <div class="auth-button">
+            <button class="dropdown-btn">Login / Register</button>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="slideshow">
+            <img src="luxury-house-mgayhrm416op3g3r.jpg" class="active" alt="Beautiful home">
+            <img src="luxury-property-bel-air-realtor-los-angels-la-exclusive-house-edgeless-infinity-swimming-pool-light-sykli.jpg" alt="Luxurious apartment">
+            <img src="pexels-pixabay-208736.jpg" alt="Cozy cabin">
+        </div>
+        <div class="cta-buttons">
+            <a href="buy.html">
+              <button>Buy a Home</button>
+            </a> 
+            
+            <a href="rent.html">
+            <button>Rent a Home</button>
+          </a>
+        </div>
+    </div>
+
+    <section id="services" class="service">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Explore our offerings to find your dream property.</p>
+            <div class="service-list">
+                <div class="service-card">
+                    <div class="card-icon">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDxXRE1HkZbxzU9b2T_6nNfjIJ8xtA5ecGZQ&s" alt="Buy Icon">
+                    </div>
+                    <h3 class="card-title">Buy a Property</h3>
+                    <p class="card-text">Find the perfect home to buy.</p>
+                    <a href="buy.html" class="card-link">Learn More</a>
+                </div>
+                <div class="service-card">
+                    <div class="card-icon">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvrm5VBWYoO4o4s0bt9pAgvnuinxs3W7js2w&s" alt="Rent Icon">
+                    </div>
+                    <h3 class="card-title">Rent a Property</h3>
+                    <p class="card-text">Explore rental options that suit your needs.</p>
+                    <a href="rent.html" class="card-link">Learn More</a>
+                </div>
+                <div class="service-card">
+                    <div class="card-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2393/2393572.png" alt="Bid Icon">
+                    </div>
+                    <h3 class="card-title">Bid on Properties</h3>
+                    <p class="card-text">Get the best deal through bidding.</p>
+                    <a href="Bidding.html" class="card-link">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="properties" class="properties">
+        <div class="container">
+            <h2 class="section-title">Featured Properties</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://urbando.in/wp-content/uploads/2023/12/luxurious-villas-in-Siruseri-626x445.jpg" alt="Property 1">
+                        <div>
+                            <h2>Luxury Villa</h2>
+                            <p>5 Bedrooms, 4 Bathrooms</p>
+                            <a href="#" class="btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://www.decorilla.com/online-decorating/wp-content/uploads/2020/08/Modern-Apartment-Decor-.jpg" alt="Property 2">
+                        <div>
+                            <h2>Modern Apartment</h2>
+                            <p>2 Bedrooms, 1 Bathroom</p>
+                            <a href="#" class="btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="https://1a-1791.com/video/s8/1/n/a/r/B/narBo.qR4e-small-Cozy-Cabin-in-the-Woods-Rus.jpg" alt="Property 3">
+                        <div>
+                            <h2>Cozy Cabin</h2>
+                            <p>3 Bedrooms, 2 Bathrooms</p>
+                            <a href="#" class="btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card">
+                      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750" alt="Property 3">
+                      <div>
+                          <h2>Beach House </h2>
+                          <p>3 Bedrooms, 2 Bathrooms</p>
+                          <a href="#" class="btn-primary">View Details</a>
+                      </div>
+                  </div>
+              </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-content">
+          <div class="footer-section">
+              <h4>BidMyHome</h4>
+              <p>Your trusted partner in finding the perfect home.</p>
+              <div class="social-icons">
+                  <a href="#"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#"><i class="fab fa-twitter"></i></a>
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                  <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+          </div>
+          <div class="footer-section">
+              <h4>Quick Links</h4>
+              <ul>
+                  <li><a href="#">About Us</a></li>
+                  <li><a href="#">Our Services</a></li>
+                  <li><a href="#">Featured Properties</a></li>
+                  <li><a href="#">Contact Us</a></li>
+              </ul>
+          </div>
+          <div class="footer-section">
+              <h4>Contact Info</h4>
+              <ul>
+                  <li><i class="fas fa-map-marker-alt"></i> 123 Real Estate Ave, City</li>
+                  <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                  <li><i class="fas fa-envelope"></i> info@bidmyhome.com</li>
+              </ul>
+          </div>
+          <div class="footer-section">
+              <h4>Newsletter</h4>
+              <p>Subscribe to our newsletter for updates</p>
+              <form class="newsletter-form">
+                  <input type="email" placeholder="Enter your email" class="form-control mb-2">
+                  <button type="submit" class="btn btn-primary">Subscribe</button>
+              </form>
+          </div>
+      </div>
+      <div class="text-center mt-4">
+          <p>&copy; 2024 BidMyHome. All rights reserved.</p>
+      </div>
+  </footer>
+
+    <script>
+              window.addEventListener('load', function() {
+            const loader = document.querySelector('.loader-wrapper');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        });
+
+        // Dark Mode Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.theme-toggle i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        }
+
+        // Animate cards on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.service-card, .properties .card').forEach((card) => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+
+</html>

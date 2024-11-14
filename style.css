@@ -1,0 +1,459 @@
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: #ffffff;
+            color: #000000;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        header nav ul li {
+            margin: 0 15px;
+        }
+
+        header nav ul li a {
+            color: #000000;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        header .search-bar input {
+            padding: 8px;
+            border: 1px;
+            border-radius: 5px;
+            outline: solid;
+            width: 200px;
+        }
+
+        .hero {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero .slideshow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .hero .slideshow img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .hero .slideshow img.active {
+            opacity: 1;
+        }
+
+        .hero .cta-buttons {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero .cta-buttons button {
+            background: #f8c102;
+            border: none;
+            color: #fff;
+            padding: 15px 30px;
+            margin: 10px;
+            margin-top: 400px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .hero .cta-buttons button:hover {
+            background: #e0a500;
+        }
+
+        #properties {
+            padding: 40px 20px;
+            background: #f4f4f4;
+        }
+        
+        #properties h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+        
+        .property-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .property-item {
+            width: calc(33% - 20px);
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .property-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .property-item .property-images {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .property-item .property-images img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s;
+        }
+        
+        .property-item:hover .property-images img {
+            transform: rotateY(10deg) rotateX(10deg);
+        }
+        
+        .property-item h3 {
+            margin: 10px 0 5px;
+            font-size: 20px;
+        }
+        
+        .property-item p {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #f8c102;
+        }
+        
+        #live-bidding {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        #live-bidding h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .live-stream {
+            margin-bottom: 30px;
+            background: #ddd;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bidding-interface {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .bidding-interface h3 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .bidding-interface input {
+            padding: 10px;
+            margin-right: 10px;
+            width: calc(100% - 130px);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .bidding-interface button {
+            padding: 10px;
+            background-color: #f8c102;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .bidding-interface button:hover {
+            background-color: #e0a500;
+        }
+
+        .bidding-interface #bid-history {
+            margin-top: 20px;
+        }
+
+        .bidding-interface #bid-history ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bidding-interface #bid-history li {
+            background-color: #f4f4f4;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #about {
+            padding: 40px 20px;
+            background: #fff;
+        }
+
+        #about h2 {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+             .team {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .team-member {
+            text-align: center;
+            width: calc(25% - 20px);
+        }
+
+        .team-member img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #f8c102;
+        }
+
+        .team-member h4 {
+            margin: 10px 0 5px;
+            font-size: 18px;
+        }
+
+        .team-member p {
+            margin: 0;
+            font-size: 16px;
+            color: #666;
+        }
+
+        #contact {
+            padding: 40px 20px;
+            background: #f4f4f4;
+        }
+
+        #contact h2 {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #contact-form input, #contact-form textarea {
+            display: block;
+            width: calc(100% - 20px);
+            margin: 0 auto 15px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #contact-form button {
+            background: #f8c102;
+            border: none;
+            color: #fff;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        #contact-form button:hover {
+            background: #e0a500;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        #propContainer {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            padding: 16px;
+        }
+        
+        a.card {
+            display: block;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s ease;
+        }
+        
+        a.card:hover {
+            transform: scale(1.05);
+        }
+        
+        .image-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .image-top, .image-bottom {
+            width: 100%;
+            height: auto;
+        }
+        
+        .image-top {
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .image-bottom {
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .info {
+            padding: 16px;
+        }
+        
+        .info h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        
+        .info p {
+            margin: 8px 0;
+        }
+        
+        .info p strong {
+            display: inline-block;
+            width: 100px;
+        }
+        
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .info h2 {
+                font-size: 1.2em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .info h2 {
+                font-size: 1em;
+            }
+        }
+        
+
+        footer {
+            background-color: #1b1b1b;
+            padding: 20px 30px;
+            color: #ccc;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .footer-logo img {
+            height: 50px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .footer-links ul li {
+            display: inline;
+        }
+        
+        .footer-links ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links ul li a:hover {
+            color: #c08240;
+        }
+        
+        .footer-social a {
+            margin: 0 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-social a img {
+            height: 24px;
+            width: 24px;
+        }
+        
+        .footer-social a:hover {
+            transform: translateY(-5px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            color: #666;
+        }

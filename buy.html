@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Premium Properties for Sale</title>
+    <style>
+                * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+}
+
+body {
+    background: #f8f9fa;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1973&q=80');
+    background-size: cover;
+    background-position: center;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Stats Section */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    background: white;
+    margin: -50px 2rem 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-box h3 {
+    color: #FF416C;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Search Section */
+.search-section {
+    padding: 2rem;
+    background: white;
+    margin: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.search-input {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-input:focus {
+    border-color: #FF416C;
+    box-shadow: 0 0 0 2px rgba(255, 65, 108, 0.2);
+    outline: none;
+}
+
+.advanced-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.filter-button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    background: #FF416C;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-weight: 500;
+}
+
+.filter-button:hover {
+    background: #FF4B2B;
+}
+
+/* Properties Section */
+.heading {
+    text-align: center;
+    padding: 2rem 0;
+    font-size: 2.5rem;
+    color: #2d3436;
+}
+
+.box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.box {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+}
+
+.box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.image-container {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.status-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: #FF416C;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    z-index: 1;
+}
+
+.content {
+    padding: 2rem;
+}
+
+.price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.price h3 {
+    font-size: 1.8rem;
+    color: #FF416C;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature i {
+    color: #FF416C;
+}
+
+.amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.amenity {
+    background: #e1f5fe;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: #00796b;
+}
+
+.agent-card {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.agent-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.buy-now-btn {
+    background: #ff9800;
+    color: white;
+}
+.buy-now-btn:hover {
+    background: #e68900;
+}
+
+
+.btn {
+    padding:  1rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    text-transform: capitalize;
+    transition: background 0.3s;
+}
+
+.btn:first-child {
+    background: #FF416C;
+    color: white;
+}
+
+.btn:last-child {
+    background: #00C6FF;
+    color: white;
+}
+
+/* Dark Mode Variables */
+:root {
+    --bg-light: #f8f9fa;
+    --text-light: #2d3436;
+    --card-light: #ffffff;
+    --gradient-1: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+    --gradient-2: linear-gradient(45deg, #00C6FF 0%, #0072FF 100%);
+    --bg-dark: #1a1a1a;
+    --text-dark: #ffffff;
+    --card-dark: #2d2d2d;
+    --border-dark: #404040;
+}
+
+[data-theme="dark"] {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+[data-theme="dark"] .box {
+    background: var(--card-dark);
+    border: 1px solid var(--border-dark);
+}
+
+[data-theme="dark"] .location p {
+    color: #b3b3b3;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--gradient-1);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    transition: transform 0.3s;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+    </style>
+</head>
+<body>
+    <center>
+        <header style="background: linear-gradient(135deg, #FF416C, #FF4B2B); padding: 2rem; text-align: center; color: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);">
+            <h1 style="margin-bottom: 0.5rem; font-size: 3rem; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Premium Properties for Sale</h1>
+            <p style="font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);">Find your perfect home to own!</p>
+        </header>
+    </center>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Discover Your Dream Property</h1>
+            <p>Browse premium properties for sale in prime locations</p>
+        </div>
+    </div>
+
+    <!-- Quick Stats Section -->
+    <div class="stats-container">
+        <div class="stat-box">
+            <h3>2000+</h3>
+            <p>Properties Available for Sale</p>
+        </div>
+        <div class="stat-box">
+            <h3>1200+</h3>
+            <p>Happy Homeowners</p>
+        </div>
+        <div class="stat-box">
+            <h3>60+</h3>
+            <p>Cities Covered</p>
+        </div>
+        <div class="stat-box">
+            <h3>24/7</h3>
+            <p>Customer Support</p>
+        </div>
+    </div>
+
+    <!-- Enhanced Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Enter location, neighborhood, or address">
+            <select class="search-input">
+                <option value="">Property Type</option>
+                <option value="apartment">Apartment</option>
+                <option value="house">House</option>
+                <option value="villa">Villa</option>
+                <option value="penthouse">Penthouse</option>
+            </select>
+            <input type="number" class="search-input" placeholder="Max Price ($)">
+            <button class="filter-button">Search</button>
+        </div>
+
+        <!-- Advanced Filters -->
+        <div class="advanced-filters">
+            <select class="search-input">
+                <option value="">Bedrooms</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3+</option>
+            </select>
+            <select class="search-input">
+                <option value="">Bathrooms</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3+</option>
+            </select>
+            <select class="search-input">
+                <option value="">Furnished</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <select class="search-input">
+                <option value="">Pet Policy</option>
+                <option value="allowed">Pets Allowed</option>
+                <option value="not-allowed">No Pets</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- Property Cards Section -->
+    <div class="box-container" id="propertyContainer">
+    </div>
+
+    <script>
+
+function goToCheckout() {
+    window.location.href = "checkout.html"; // Navigate to checkout page
+}
+
+
+        // Property Cards Data for Sale
+
+// Updated goToCheckout function to store selected property in local storage
+function goToCheckout(property) {
+    localStorage.setItem('selectedProperty', JSON.stringify(property));
+    window.location.href = "checkout.html"; // Navigate to checkout page
+}
+
+// Property Cards Data for Sale
+const propertyCards = [
+    {
+        image: 'https://images.unsplash.com/photo-1527511960430-dfbc1c3cda99',
+        price: '$650,000',
+        location: 'Luxurious Apartment',
+        amenities: ['Wi-Fi', 'Pool', 'Gym'],
+        available: 'Available Now',
+        bedrooms: 3,
+        bathrooms: 2,
+        area: 1500,
+        furnished: true,
+        petPolicy: 'allowed',
+        agent: {
+            name: 'John Doe',
+            phone: '555-555-5555',
+            photo: 'https://randomuser.me/api/portraits/men/75.jpg'
+        }
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00',
+        price: '$450,000',
+        location: 'Charming Studio',
+        amenities: ['Utilities Included', 'Balcony'],
+        available: 'Available Now',
+        bedrooms: 1,
+        bathrooms: 1,
+        area: 800,
+        furnished: false,
+        petPolicy: 'not-allowed',
+        agent: {
+            name: 'Jane Doe',
+            phone: '555-555-5555',
+            photo: 'https://randomuser.me/api/portraits/women/75.jpg'
+        }
+        
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00',
+        price: '$450,000',
+        location: 'Charming Studio',
+        amenities: ['Utilities Included', 'Balcony'],
+        available: 'Available Now',
+        bedrooms: 1,
+        bathrooms: 1,
+        area: 800,
+        furnished: false,
+        petPolicy: 'not-allowed',
+        agent: {
+            name: 'Jane Doe',
+            phone: '555-555-5555',
+            photo: 'https://randomuser.me/api/portraits/women/75.jpg'
+        }
+        
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00',
+        price: '$450,000',
+        location: 'Charming Studio',
+        amenities: ['Utilities Included', 'Balcony'],
+        available: 'Available Now',
+        bedrooms: 1,
+        bathrooms: 1,
+        area: 800,
+        furnished: false,
+        petPolicy: 'not-allowed',
+        agent: {
+            name: 'Jane Doe',
+            phone: '555-555-5555',
+            photo: 'https://randomuser.me/api/portraits/women/75.jpg'
+        }
+        
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00',
+        price: '$450,000',
+        location: 'Charming Studio',
+        amenities: ['Utilities Included', 'Balcony'],
+        available: 'Available Now',
+        bedrooms: 1,
+        bathrooms: 1,
+        area: 800,
+        furnished: false,
+        petPolicy: 'not-allowed',
+        agent: {
+            name: 'AMRIT JOSHI',
+            phone: '555-555-5555',
+            photo: 'https://randomuser.me/api/portraits/women/75.jpg'
+        }
+        
+    },
+    {
+        image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00',
+        price: '$450,000',
+        location: 'Charming Studio',
+        amenities: ['Utilities Included', 'Balcony'],
+        available: 'Available Now',
+        bedrooms: 1,
+        bathrooms: 1,
+        area: 800,
+        furnished: false,
+        petPolicy: 'not-allowed',
+        agent: {
+            name: 'AMRIT JOSHI',
+            phone: '555-555-5555',
+            photo: 'https://randomuser.me/api/portraits/women/75.jpg'
+        }
+        
+    },
+
+    // Additional property data can be added here
+];
+
+const boxContainer = document.getElementById('propertyContainer');
+
+propertyCards.forEach((property, index) => {
+    const propertyCard = `
+        <div class="box">
+            <div class="image-container">
+                <img src="${property.image}" alt="${property.location}">
+                <div class="status-badge">${property.available}</div>
+            </div>
+            <div class="content">
+                <div class="price">
+                    <h3>${property.price}</h3>
+                </div>
+                <div class="location">
+                    <h3>${property.location}</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> ${property.location}</p>
+                </div>
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-bed"></i>
+                        <span>${property.bedrooms} Beds</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-bath"></i>
+                        <span>${property.bathrooms} Baths</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-ruler-combined"></i>
+                        <span>${property.area} sq ft</span>
+                    </div>
+                </div>
+                <div class="amenities">
+                    ${property.amenities.map(amenity => `
+                        <span class="amenity"><i class="fas fa-check"></i> ${amenity}</span>
+                    `).join('')}
+                </div>
+                <div class="agent-card">
+                    <img src="${property.agent.photo}" alt="Agent" class="agent-photo">
+                    <div>
+                        <h4>${property.agent.name}</h4>
+                        <p>${property.agent.phone}</p>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn">View Details</button>
+                    <a href="checkout.html" class="btn buy-now-btn" onclick="goToCheckout(${JSON.stringify(property)})">Buy Now</a>
+
+                    <button class="btn">Contact Agent</button>
+                </div>
+            </div>
+        </div>
+    `;
+    boxContainer.insertAdjacentHTML('beforeend', propertyCard);
+});
+
+
+
+        // Dark Mode Toggle
+        const themeToggle = document.createElement('button');
+        themeToggle.className = 'theme-toggle';
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        document.body.appendChild(themeToggle);
+
+        themeToggle.addEventListener('click', () => {
+            document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+            themeToggle.innerHTML = document.body.dataset.theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+    </script>
+</body>
+</html>
